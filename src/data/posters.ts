@@ -2378,6 +2378,35 @@ const postersByCategory = UNIQUE_POSTERS.reduce<Record<PosterCategory, Poster[]>
   return acc
 }, {} as Record<PosterCategory, Poster[]>)
 
+const categoryOrder = [
+  ...CATEGORIES.map(category => category.id),
+  ...UNIQUE_POSTERS.map(poster => poster.category).filter(
+    (category, index, categories) =>
+      !CATEGORIES.some(knownCategory => knownCategory.id === category) &&
+      categories.indexOf(category) === index
+  ),
+]
+
+const mixedAllPosters: Poster[] = []
+let currentCategoryIndex = 0
+
+while (mixedAllPosters.length < UNIQUE_POSTERS.length) {
+  let addedPosterInRound = false
+
+  for (const category of categoryOrder) {
+    const categoryPosters = postersByCategory[category] || []
+    const poster = categoryPosters[currentCategoryIndex]
+
+    if (poster) {
+      mixedAllPosters.push(poster)
+      addedPosterInRound = true
+    }
+  }
+
+  if (!addedPosterInRound) break
+  currentCategoryIndex += 1
+}
+
 export function getPostersByCategory(category: PosterCategory): Poster[] {
   return (postersByCategory[category] || []).slice()
 }
@@ -2423,7 +2452,7 @@ function getPaginationCacheKey(pageSize: number, category?: PosterCategory): Pag
 }
 
 function buildPaginationCache(pageSize: number, category?: PosterCategory): PaginationCacheValue {
-  const source = category ? postersByCategory[category] || [] : UNIQUE_POSTERS
+  const source = category ? postersByCategory[category] || [] : mixedAllPosters
   const pages: Poster[][] = []
 
   for (let i = 0; i < source.length; i += pageSize) {
