@@ -10,13 +10,15 @@ interface PosterGridProps {
   loadMore?: () => Promise<Poster[]>
   locale: string
   hasMore?: boolean
+  resetKey?: string
 }
 
 export function PosterGrid({ 
   initialPosters, 
   loadMore, 
   locale,
-  hasMore = false 
+  hasMore = false,
+  resetKey = 'default',
 }: PosterGridProps) {
   const t = useTranslations('posters')
   const [posters, setPosters] = useState<Poster[]>(initialPosters)
@@ -67,11 +69,14 @@ export function PosterGrid({
     }
   }, [handleLoadMore])
 
-  // Update posters when initialPosters change (e.g., category change)
+  // Reset posters only when switching to a different poster source.
   useEffect(() => {
     setPosters(initialPosters)
+  }, [initialPosters, resetKey])
+
+  useEffect(() => {
     setCanLoadMore(hasMore)
-  }, [initialPosters, hasMore])
+  }, [hasMore])
 
   if (posters.length === 0) {
     return (
@@ -89,7 +94,7 @@ export function PosterGrid({
         .poster-container {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 2px;
+          gap: 8px;
           width: 100%;
         }
         
@@ -111,9 +116,6 @@ export function PosterGrid({
         
         .poster-card {
           width: 100%;
-          transform: scale(0.9);
-          transform-origin: center;
-          margin-bottom: -10%;
         }
       `}</style>
       

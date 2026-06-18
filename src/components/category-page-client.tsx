@@ -55,6 +55,7 @@ export function CategoryPageClient({
         loadMore={loadMore}
         locale={locale}
         hasMore={currentPage < totalPages}
+        resetKey={slug}
       />
     </>
   )

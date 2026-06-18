@@ -43,6 +43,7 @@ export function HeroClient({ initialPosters, totalPages, locale }: HeroClientPro
         loadMore={loadMore}
         locale={locale}
         hasMore={currentPage < totalPages}
+        resetKey="home"
       />
     </>
   )

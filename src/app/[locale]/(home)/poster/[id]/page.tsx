@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { appConfig } from '@/lib/appConfig'
 import { Metadata } from 'next'
+import { getAsNeededLocalizedUrl } from '@windrun-huaiin/lib'
 
 export const dynamic = 'force-static'
 export const revalidate = false
@@ -41,7 +42,8 @@ export async function generateMetadata({ params }: PosterDetailPageProps): Promi
     description = t('defaultDescription').substring(0, 160)
   }
   
-  const canonicalUrl = `${appConfig.baseUrl}/${locale}/poster/${id}`
+  const posterPath = `/poster/${id}`
+  const canonicalUrl = `${appConfig.baseUrl}${getAsNeededLocalizedUrl(locale, posterPath)}`
   const keywords = poster.tags && poster.tags.length > 0 
     ? `${poster.tags.join(', ')}, free download, music poster, wall art, ${posterTitle.toLowerCase()}`
     : `music poster, free download, wall art, ${posterTitle.toLowerCase()}`
@@ -54,7 +56,7 @@ export async function generateMetadata({ params }: PosterDetailPageProps): Promi
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        "en": `${appConfig.baseUrl}/en/poster/${id}`,
+        "en": `${appConfig.baseUrl}${getAsNeededLocalizedUrl('en', posterPath)}`,
       }
     },
     openGraph: {

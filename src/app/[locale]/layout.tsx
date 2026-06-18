@@ -10,6 +10,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { getAsNeededLocalizedUrl } from '@windrun-huaiin/lib';
 import React from 'react';
 import './globals.css';
+import { HOME_PREVIEW_IMAGE } from '@/lib/home-seo';
 
 export const dynamic = 'force-static';
 
@@ -20,15 +21,41 @@ export async function generateMetadata({
 }) {
   const { locale } = await paramsPromise;
   const t = await getTranslations({ locale, namespace: 'home' });
+  const title = t('webTitle');
+  const description = t('webDescription');
+  const canonicalUrl = `${appConfig.baseUrl}${getAsNeededLocalizedUrl(locale, '/')}`;
+
   return {
-    title: t('webTitle'),
-    description: t('webDescription'),
+    metadataBase: new URL(appConfig.baseUrl),
+    title,
+    description,
     keywords: t('keywords'),
     alternates: {
-      canonical: `${appConfig.baseUrl}${getAsNeededLocalizedUrl(locale, '/')}`,
+      canonical: canonicalUrl,
       languages: {
         "en": `${appConfig.baseUrl}${getAsNeededLocalizedUrl('en', '/')}`,
       }
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: 'website',
+      locale,
+      images: [
+        {
+          url: HOME_PREVIEW_IMAGE.url,
+          width: HOME_PREVIEW_IMAGE.width,
+          height: HOME_PREVIEW_IMAGE.height,
+          alt: HOME_PREVIEW_IMAGE.alt,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [HOME_PREVIEW_IMAGE.url],
     },
     icons: [
       { rel: "icon", type: 'image/png', sizes: "16x16", url: "/favicon-16x16.png" },

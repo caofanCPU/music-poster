@@ -11,9 +11,14 @@ interface PosterCardProps {
   priority?: boolean
 }
 
+function formatPosterTitle(id: string) {
+  return id.replace(/-/g, ' ')
+}
+
 export function PosterCard({ poster, locale, priority = false }: PosterCardProps) {
   const [imageLoading, setImageLoading] = useState(true)
   const [imageError, setImageError] = useState(false)
+  const posterTitle = formatPosterTitle(poster.id)
 
   return (
     <Link
@@ -42,7 +47,7 @@ export function PosterCard({ poster, locale, priority = false }: PosterCardProps
         ) : (
           <Image
             src={poster.imageUrl}
-            alt={poster.id}
+            alt={`${posterTitle} music poster`}
             fill
             priority={priority}
             className={`object-cover transition-all duration-700 group-hover:scale-110 ${
@@ -61,7 +66,7 @@ export function PosterCard({ poster, locale, priority = false }: PosterCardProps
         <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <div className="absolute bottom-0 left-0 right-0 p-4">
             <h3 className="text-white font-semibold text-lg line-clamp-2">
-              {poster.id.replace(/-/g, ' ')}
+              {posterTitle}
             </h3>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { PosterCategory } from '@/types/poster'
 import { FAQ, SeoContent } from "@windrun-huaiin/third-ui/main/server"
 import { appConfig } from '@/lib/appConfig'
 import { Metadata } from 'next'
+import { getAsNeededLocalizedUrl } from '@windrun-huaiin/lib'
 
 export const dynamic = 'force-static'
 export const revalidate = false
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const categoryName = t(category.nameKey)
   const title = `${categoryName} Posters - Free Download`
   const description = `Explore our collection of ${categoryName.toLowerCase()} posters. ${category.description}. Free download, no registration required. High-quality designs for personal and commercial use.`
-  const canonicalUrl = `${appConfig.baseUrl}/${locale}/category/${slug}`
+  const categoryPath = `/category/${slug}`
+  const canonicalUrl = `${appConfig.baseUrl}${getAsNeededLocalizedUrl(locale, categoryPath)}`
   
   return {
     title,
@@ -41,7 +43,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        "en": `${appConfig.baseUrl}/en/category/${slug}`,
+        "en": `${appConfig.baseUrl}${getAsNeededLocalizedUrl('en', categoryPath)}`,
       }
     },
     openGraph: {

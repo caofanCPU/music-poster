@@ -1,8 +1,7 @@
 # General search engine rules
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /api/
+
 
 # Sitemap
 Sitemap: https://www.musicposter.org/sitemap.xml
@@ -22,10 +21,3 @@ User-agent: Bytespider
 User-agent: meta-externalagent
 Allow: /llms.txt
 Allow: /llms-full.txt
-Allow: /en/
-Disallow: /user-content/
-Disallow: /sign-in/
-Disallow: /sign-up/
-Disallow: /waitlist/ 
-Disallow: /en/blog/
-Disallow: /en/legal/
